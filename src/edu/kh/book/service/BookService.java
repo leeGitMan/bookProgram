@@ -1,5 +1,7 @@
 package edu.kh.book.service;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,7 +21,6 @@ public class BookService {
 	Set<Map <String, Object> > favoriteBook = new HashSet< Map<String, Object>>();
 	
 	
-	
 	public void displayMenu() {
 		
 		int menuNum = 0;
@@ -36,7 +37,11 @@ public class BookService {
 				System.out.println(" 5. 도서 삭제 ");
 				System.out.println(" 6. 즐찾 추가 ");
 				System.out.println(" 7. 즐찾 삭제 ");
-				System.out.println(" 8. 즐찾 내보내기 ");
+				System.out.println(" 8. 즐찾 조회 ");
+				System.out.println(" 9. 즐찾 내보내기 ");
+				System.out.println(" 0. 프로그램 종료 ");
+				
+				
 				
 				
 				System.out.println();
@@ -54,8 +59,9 @@ public class BookService {
 				case 4 : updateBook(); break;
 				case 5 : deleteBook(); break;
 				case 6 : favoriteBook(); break;
-				case 7 : break;
-				case 8 : break;
+				case 7 : deleteFavoriteBook(); break;
+				case 8 : selectAllFavoriteBook(); break;
+				case 9 : output1(); break;
 				case 0 : System.out.println("프로그램 종료"); break;
 				default : System.out.println("잘못 입력하셨습니다."); break;
 				}
@@ -66,7 +72,7 @@ public class BookService {
 			
 		}catch(InputMismatchException e) {
 			
-			
+			System.out.println("유효하지 않은 숫자 입력");
 			e.printStackTrace();
 			menuNum = -1;
 			
@@ -108,7 +114,7 @@ public class BookService {
 		
 		setBook.add(map);
 		
-		System.out.println(setBook + " 가 추가되었습니다.");
+		System.out.println(setBook + "가 추가되었습니다.");
 		
 		
 	}
@@ -220,7 +226,7 @@ public class BookService {
 		String name = sc.nextLine();
 		
 		for(Map<String, Object> map : setBook) {
-			System.out.println("하하하하");
+			
 			
 			if(map.get("도서 제목").equals(name)) {
 				
@@ -232,8 +238,6 @@ public class BookService {
 				fav.put("작가 이름", map.get("작가 이름"));
 				
 				favoriteBook.add(fav);
-				
-				
 			}
 		}
 		System.out.println(favoriteBook.toString() + " 가 즐겨찾기에 추가 되었습니다.");
@@ -243,20 +247,68 @@ public class BookService {
 	
 	public void deleteFavoriteBook() {
 		
+		System.out.println(" === 즐겨 찾기 삭제 페이지 === ");
+		System.out.println();
+		selectAllFavoriteBook();
+		System.out.println();
+		
+		System.out.println("즐겨 찾기 삭제를 원하는 책 번호를 입력하세요.");
+		Integer bookNum = sc.nextInt();
+		sc.nextLine();
 		
 		
+		for(Map<String, Object>fav : favoriteBook) {
+			if(fav.get("도서 번호") == bookNum) {
+				fav.clear();
+				System.out.println("즐찾 삭제 완료");
+			}
+		}
+	}
 		
+	
+	public void selectAllFavoriteBook() {
 		
+		System.out.println(" === 즐겨 찾기 조회 페이지 === ");
+		System.out.println();
 		
-		
-		
+		System.out.println(favoriteBook.toString());
 	}
 	
 	public void output1() {
 		
 		
+		System.out.println(" === 즐겨 찾기 내보내기 === ");
+		System.out.println();
+		
+		String a = null;
+		
+		FileWriter fw = null;
+		
+		try {
+			
+			fw = new FileWriter("test.txt", true);
+			
+			
+			fw.write(favoriteBook.toString());
+			
+			
+			System.out.println("성공!");
+			
+			
+		}catch(IOException e) {
+			
+			e.printStackTrace();
+			
+		}finally {
+			
+			try {
+				
+				fw.close();
+				
+			}catch(IOException e) {
+				
+				e.printStackTrace();
+			}
+		}
 	}
-	
-	
-	
 }
