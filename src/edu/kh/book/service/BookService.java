@@ -72,13 +72,11 @@ public class BookService {
 			
 		}catch(InputMismatchException e) {
 			
-			System.out.println("유효하지 않은 숫자 입력");
+			System.out.println("유효하지 않은 입력");
 			e.printStackTrace();
 			menuNum = -1;
 			
-		}
-	
-		
+		}	
 	}
 	
 	public void addBook() {
